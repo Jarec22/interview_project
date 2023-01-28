@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views import generic
@@ -24,6 +24,17 @@ class DetailView(generic.DetailView):
 class ResultsView(generic.DetailView):
     model = Question
     template_name = 'polls/results.html'
+
+    def get_context_data(self, *args, **kwargs):
+        self.object = self.get_object()
+        context = super(ResultsView, self).get_context_data(**kwargs)
+        question = Question.objects.get(pk=self.kwargs['pk'])
+        choices = question.choice_set.all()
+        choices_text = [choice.choice_text for choice in choices]
+        choices_votes = [choice.votes for choice in choices]
+        context['choices_text'] = choices_text
+        context['choices_votes'] = choices_votes
+        return context
 
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
