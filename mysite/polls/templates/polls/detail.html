@@ -1,24 +1,32 @@
 <!DOCTYPE html>
-<html lang="en-US">
-    <head>
-        <meta charset="utf-8"/>
-        <title> Polls </title>
-    </head>
-    <body>
+{% extends "polls/base.html" %}
+
+    {% block content %}
+    <div style="padding: 5rem">
+    <div class="card">
         <form action="{% url 'polls:vote' question.id %}" method="post">
             {% csrf_token %}
             <fieldset>
-                <legend><h1>{{ question.question_text }}</h1></legend>
+                <div class="card-header">
+                    <legend><h1>{{ question.question_text }}</h1></legend>
+                </div>
+                <div class="card-body">
                 {% if error_message %}
                     <p><strong>{{ error_message }}</strong></p>
                 {% endif %}
+            
                 {% for choice in question.choice_set.all %}
                     <input type="radio" name="choice" id="choice {{ forloop.counter}}"
                         value="{{ choice.id }}">
                     <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
                 {% endfor %}
+                </div>
             </fieldset>
-            <input type="submit" value="Vote">
+            <div class="card-footer">
+                <input type="submit" value="Vote">
+            </div>
         </form>
-    </body>
+    </div>
+</div>
+    {% endblock content %}
 </html>
