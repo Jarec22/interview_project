@@ -1,18 +1,24 @@
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views import generic
 from django.db.models import F
 from django.utils import timezone
+from django.core.paginator import Paginator
 
 from .models import Question, Choice
 
 class IndexView(generic.ListView):
+    model = Question
     template_name = 'polls/index.html'
-    context_object_name = 'latest_question_list'
+    context_object_name = 'questions'
+    paginate_by = 10
+    queryset = Question.objects.all()
 
-    def get_queryset(self):
-        return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
+
+    #def get_queryset(self):
+        #return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:10]
+        #return Question.objects.all()
 
 class DetailView(generic.DetailView):
     model = Question
