@@ -4,7 +4,8 @@ from django.urls import reverse
 from django.views import generic
 from django.db.models import F
 from django.utils import timezone
-from django.core.paginator import Paginator
+from collections import defaultdict
+from django.views.decorators.cache import cache_page
 
 from .models import Question, Choice
 
@@ -56,3 +57,20 @@ def vote(request, question_id):
         selected_choice.votes = F('votes') + 1
         selected_choice.save()
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+
+@cache_page(60 * 30)
+def summarize(request):
+        choices = Choice.objects.values("question", "votes")
+        question = 0
+        tally = defaultdict(int)
+        for choice in choices:
+            if question == choice["question"]:
+                index += 1
+                tally[index] += choice["votes"]
+            else:
+                index = 0
+                question = choice["question"]
+                tally[index] += choice["votes"]
+            tally_percentages = [tally_vote/sum(tally.values())*100 for tally_vote in tally.values()]
+        context = {"tally_percentages": tally_percentages, "tally_names":["A","B","C","D"] }
+        return render(request, 'polls/summary.html', context)

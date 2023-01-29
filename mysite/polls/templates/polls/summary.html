@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+{% extends "polls/base.html" %}
+{% block content %}
+{% for vote in tally_votes %}
+    {{ tally_names }}
+    {{ tally_votes }}
+{% endfor %}
+<div class="card" style="margin:1rem">
+    <div class="card-header">
+    </div>
+    <div class="card-body" style="display:flex; justify-content:center">
+        <canvas id="myChart" width="400" height="300" style="max-width: 50%;"></canvas>
+        <script>
+        $(document).ready(function(){
+            var ctx = document.getElementById('myChart');
+            var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {{ tally_names|safe }},
+                datasets: [{
+                    label: '% of Votes',
+                    data: {{ tally_percentages|safe }},
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)', 
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        xAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                stepSize: 1
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                stepSize: 1
+                            }
+                        }],
+                    }
+                }
+            });
+        })
+    </script>
+</div>
+<div class="card-footer">
+    <a class="btn btn-primary" href="{% url 'polls:index' %}">Back to polls</a>
+</div>
+</div>
+{% endblock content %}
+</html>

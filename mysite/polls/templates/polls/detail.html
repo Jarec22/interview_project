@@ -23,7 +23,9 @@
                 </div>
             </fieldset>
             <div class="card-footer">
-                <input type="submit" value="Vote">
+                <input class="btn btn-primary" type="submit" value="Vote">
+                <a class="btn btn-primary" href="{% url 'polls:index' %}">Back to polls</a>
+                <a class="btn btn-primary" href="{% url 'polls:results' question.id %}">Show results</a>
             </div>
         </form>
     </div>

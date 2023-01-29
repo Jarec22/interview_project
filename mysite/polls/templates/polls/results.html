@@ -48,6 +48,9 @@
                                     ticks: {
                                         beginAtZero: true,
                                         stepSize: 1
+                                    },
+                                    beforeBuildTicks: function(axis) {
+                                        axis.options.ticks.stepSize = Math.floor(axis.max/10);
                                     }
                                 }],
                             }
@@ -58,6 +61,7 @@
         </div>
         <div class="card-footer">
             <a class="btn btn-primary" href="{% url 'polls:detail' question.id %}">Vote again?</a>
+            <a class="btn btn-primary" href="{% url 'polls:index' %}">Back to polls</a>
         </div>
     </div>
     {% endblock content %}
