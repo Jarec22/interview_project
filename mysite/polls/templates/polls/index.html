@@ -6,6 +6,7 @@
                     <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
                 {% endfor %}
             </ul>
+            <a class="btn btn-primary" href="{% url 'polls:summary' %}">See overall percentage of votes</a>
         <div class="card-footer" style="display:flex; justify-content:center">
             <div class="pagination">
                 <span class="step-links">

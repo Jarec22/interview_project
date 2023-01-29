@@ -51,6 +51,9 @@
                             ticks: {
                                 beginAtZero: true,
                                 stepSize: 1
+                            },
+                            beforeBuildTicks: function(axis) {
+                                axis.options.ticks.stepSize = Math.floor(axis.max/10);
                             }
                         }],
                     }

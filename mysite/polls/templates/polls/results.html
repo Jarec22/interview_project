@@ -62,6 +62,7 @@
         <div class="card-footer">
             <a class="btn btn-primary" href="{% url 'polls:detail' question.id %}">Vote again?</a>
             <a class="btn btn-primary" href="{% url 'polls:index' %}">Back to polls</a>
+            <a class="btn btn-primary" href="{% url 'polls:summary' %}">See overall percentage of votes</a>
         </div>
     </div>
     {% endblock content %}
