@@ -1,6 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
+import requests
 
 from django.utils import timezone
 
@@ -26,6 +27,7 @@ class DetailView(generic.DetailView):
     def get_queryset(self):
         return Question.objects.filter(pub_date__lte=timezone.now())
 
+"""
 class ResultsView(generic.DetailView):
     model = Question
     template_name = 'polls/results.html'
@@ -38,6 +40,27 @@ class ResultsView(generic.DetailView):
         context['choices_text'] = choices_text
         context['choices_votes'] = choices_votes
         return context
+
+"""
+
+class ResultsView(generic.DetailView):
+    model = Question
+    template_name = 'polls/results.html'
+
+    def get_context_data(self, **kwargs):
+        pk = self.kwargs['pk']
+        question_text = kwargs['object']
+        url = "http://127.0.0.1:8080/api/question/{pk}/".format(pk=pk)
+        response = requests.get(url)
+        choices = response.json()
+        choices_text = [choice["choice_text"] for choice in choices]
+        choices_votes = [choice["votes"] for choice in choices]
+        context = {"choices_text": choices_text,
+                "choices_votes": choices_votes,
+                "question": {"id":pk,
+                            "question_text": question_text}}
+        return context      
+#"""
 
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
